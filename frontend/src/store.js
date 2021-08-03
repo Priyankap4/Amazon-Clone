@@ -1,23 +1,49 @@
-import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
+import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { cartReducer } from './reducers/cartReducers';
-import { orderCreateReducer, orderDetailsReducer, orderMineListReducer } from './reducers/orderReducers';
-import { productDetailsReducer, productListReducer } from './reducers/productReducers';
-import { userDeleteReducer, userDetailsReducer, userListReducer, userRegisterReducer, userSigninReducer, userUpdateProfileReducer, userUpdateReducer } from './reducers/userReducers';
+import {
+    orderCreateReducer,
+    orderDeleteReducer,
+    orderDeliverReducer,
+    orderDetailsReducer,
+    orderListReducer,
+    orderMineListReducer,
+    orderSummaryReducer,
+} from './reducers/orderReducers';
+import {
+    productCategoryListReducer,
+    productCreateReducer,
+    productDeleteReducer,
+    productDetailsReducer,
+    productListReducer,
+    productReviewCreateReducer,
+    productUpdateReducer,
+} from './reducers/productReducers';
+import {
+    userAddressMapReducer,
+    userDeleteReducer,
+    userDetailsReducer,
+    userListReducer,
+    userRegisterReducer,
+    userSigninReducer,
+    userTopSellerListReducer,
+    userUpdateProfileReducer,
+    userUpdateReducer,
+} from './reducers/userReducers';
 
 const initialState = {
-    userSignin:{
+    userSignin: {
         userInfo: localStorage.getItem('userInfo')
-        ? JSON.parse(localStorage.getItem('userInfo'))
-        : null,
+            ? JSON.parse(localStorage.getItem('userInfo'))
+            : null,
     },
-    cart:{
+    cart: {
         cartItems: localStorage.getItem('cartItems')
-        ? JSON.parse(localStorage.getItem('cartItems'))
-        : [],
+            ? JSON.parse(localStorage.getItem('cartItems'))
+            : [],
         shippingAddress: localStorage.getItem('shippingAddress')
-        ? JSON.parse(localStorage.getItem('shippingAddress'))
-        : {},
+            ? JSON.parse(localStorage.getItem('shippingAddress'))
+            : {},
     },
 };
 const reducer = combineReducers({
@@ -32,8 +58,19 @@ const reducer = combineReducers({
     userDetails: userDetailsReducer,
     userUpdateProfile: userUpdateProfileReducer,
     userUpdate: userUpdateReducer,
+    productCreate: productCreateReducer,
+    productUpdate: productUpdateReducer,
+    productDelete: productDeleteReducer,
+    orderList: orderListReducer,
+    orderDelete: orderDeleteReducer,
+    orderDeliver: orderDeliverReducer,
     userList: userListReducer,
     userDelete: userDeleteReducer,
+    userTopSellersList: userTopSellerListReducer,
+    productCategoryList: productCategoryListReducer,
+    productReviewCreate: productReviewCreateReducer,
+    userAddressMap: userAddressMapReducer,
+    orderSummary: orderSummaryReducer,
 })
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

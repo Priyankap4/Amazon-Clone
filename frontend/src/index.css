@@ -121,7 +121,7 @@ a.brand{
   align-items: center;
 }
 .row.center{
-  justify-content: center;
+  justify-content: space-around;
 }
 .row.top{
   align-items: flex-start;
@@ -172,6 +172,10 @@ img.large{
   background-color: #f8f8f8;
   border-radius: 0.5rem;
   margin: 1rem;
+  box-shadow: 2px 2px #000;
+}
+.card:hover{
+  box-shadow: 2px 2px #20a020;
 }
 .card-body{
   padding: 1rem;
@@ -293,4 +297,14 @@ margin: 1rem;
 
 .table button{
 margin: 0.4rem 0.2rem;
+}
+
+/********homeScreen**********/
+
+.home_container img{
+  width: 100%;
+
+  z-index: -1;
+  margin-bottom: -150px;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgb(0, 0, 0, 0.1));
 }

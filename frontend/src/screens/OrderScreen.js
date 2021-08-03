@@ -1,23 +1,45 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { detailsOrder } from '../actions/orderActions';
+import { deliverOrder, detailsOrder } from '../actions/orderActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import { ORDER_DELIVER_RESET } from '../constants/orderConstants';
 
 export default function OrderScreen(props) {
 
     const orderId = props.match.params.id;
     const orderDetails = useSelector((state) => state.orderDetails);
     const { order, loading, error } = orderDetails;
+    const userSignin = useSelector((state) => state.userSignin);
+    const { userInfo } = userSignin;
+
+    const orderDeliver = useSelector((state) => state.orderDeliver);
+    const {
+        loading: loadingDeliver,
+        error: errorDeliver,
+        success: successDeliver,
+    } = orderDeliver;
+
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(detailsOrder(orderId));
-    }, [dispatch, orderId]);
+        if (
+            !order ||
+            successDeliver ||
+            (order && order._id !== orderId)
+        ) {
+            dispatch({ type: ORDER_DELIVER_RESET });
+            dispatch(detailsOrder(orderId));
+        }
+    }, [dispatch, orderId, successDeliver]);
 
-    const shoppingHandler = () =>{
+    const deliverHandler = () => {
+        dispatch(deliverOrder(order._id));
+    };
+
+    const shoppingHandler = () => {
         props.history.push('/');
     }
     return loading ? (
@@ -28,7 +50,7 @@ export default function OrderScreen(props) {
         <div>
             <h1>Order {order._id}</h1>
             <div className="row top">
-                <div variant = "success" className=" bg-success">
+                <div variant="success" className=" bg-success">
                     <h1>Order Placed Successfully!!</h1>
                 </div>
             </div>
@@ -140,18 +162,33 @@ export default function OrderScreen(props) {
                                 </div>
                             </li>
                             <li>
-                            <button
+                                <button
                                     type="button"
                                     onClick={shoppingHandler}
                                     className="primary block"
                                 >
-                                   Continue Shopping
+                                    Continue Shopping
                                 </button>
                             </li>
                             {
                                 loading && <LoadingBox></LoadingBox>
                             }
-                            { error && <MessageBox variant="danger">{error}</MessageBox>}
+                            {error && <MessageBox variant="danger">{error}</MessageBox>}
+                            {userInfo.isAdmin && !order.isDelivered && (
+                                <li>
+                                    {loadingDeliver && <LoadingBox></LoadingBox>}
+                                    {errorDeliver && (
+                                        <MessageBox variant="danger">{errorDeliver}</MessageBox>
+                                    )}
+                                    <button
+                                        type="button"
+                                        className="primary block"
+                                        onClick={deliverHandler}
+                                    >
+                                        Deliver Order
+                                    </button>
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>
